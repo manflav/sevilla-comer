@@ -2,12 +2,12 @@ import {useEffect, useRef} from 'react'
 
 import Map from 'ol/Map'
 import View from 'ol/View'
-import TileLayer from 'ol/Layer/Tile'
+import TileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import XYZ from 'ol/source/XYZ'
 import Feature from 'ol/Feature'
-import Point from 'ol/Point'
+import Point from 'ol/geom/Point'
 import {fromLonLat} from 'ol/proj'
 import {Style, Circle, Fill, Stroke} from 'ol/style'
 import 'ol/ol.css'
@@ -23,7 +23,7 @@ const markerStyle = new Style({
 })
 
 
-export default function MapComponent({places, onSelecPlace}) {
+export default function MapComponent({places, onSelectPlace}) {
     const mapRef = useRef(null)
     const mapInstanceRef = useRef(null)
     const vectorSourceRef = useRef(new VectorSource())
@@ -50,12 +50,32 @@ export default function MapComponent({places, onSelecPlace}) {
                 center: SEVILLA_CENTER,
                 zoom: 14,
             }),
+        },[])
+
+        map.on('click', (e) => {
+            const feature = map.forEachFeatureAtPixel(e.pixel, (f) => f)
+            if (feature) {
+                onSelectPlace(feature.get('placeData'))
+            }
         })
+        mapInstanceRef.current = map
 
-
-
-
+        return () => map.setTarget(null)
     })
 
 
+    useEffect(() => {
+        const source =vectorSourceRef.current
+        source.clear()
+
+        places.forEach((place) => {
+            const feature = new Feature({
+                geometry: new Point(fromLonLat([place.lon, place.lat])),
+            })
+            feature.set('placeData', place)
+            source.addFeature(feature)
+        })
+    }, [places])
+
+    return <div ref={mapRef} className="map" />
 }

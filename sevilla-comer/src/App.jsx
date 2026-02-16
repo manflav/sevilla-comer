@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import FilterBar from './components/FilterBar'
+import MapComponent from './components/Map'
 
 export default function App() {
   const [activeFilter, setActiveFilter] = useState(null)
@@ -20,6 +21,12 @@ export default function App() {
         setLoading={setLoading}
         setSelectedPlace={setSelectedPlace}
       />
+      <main className="map-container">
+        <MapComponent
+          places={places}
+          onSelectedPlace={setSelectedPlace}
+        />
+      </main>
     </div>
   )
 }
