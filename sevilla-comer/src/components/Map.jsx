@@ -12,6 +12,7 @@ import {fromLonLat} from 'ol/proj'
 import {Style, Circle, Fill, Stroke} from 'ol/style'
 import 'ol/ol.css'
 
+
 const SEVILLA_CENTER = fromLonLat([-5.9845, 37.3891])
 
 const markerStyle = new Style({
@@ -58,6 +59,10 @@ export default function MapComponent({places, onSelectPlace}) {
                 onSelectPlace(feature.get('placeData'))
             }
         })
+        map.on('pointermove', (e) => {
+            const feature = map.forEachFeatureAtPixel(e.pixel, (f) => f)
+            map.getTargetElement().style.cursor = feature ? 'pointer' : ''
+        })
         mapInstanceRef.current = map
 
         return () => map.setTarget(null)
@@ -79,3 +84,4 @@ export default function MapComponent({places, onSelectPlace}) {
 
     return <div ref={mapRef} className="map" />
 }
+
