@@ -1,6 +1,8 @@
 import {useState} from 'react'
 import FilterBar from './components/FilterBar'
 import MapComponent from './components/Map'
+import PlaceCard from './components/PlaceCard'
+import logo from './assets/logo-white.svg'
 
 export default function App() {
   const [activeFilter, setActiveFilter] = useState(null)
@@ -11,7 +13,7 @@ export default function App() {
   return (
     <div className="app-wrapper">
       <header className="app-header">
-        <h1>Sevilla Comer</h1>
+          <img className="logo-sub" src={logo} alt="Dónde comer" />
       </header>
       
       <FilterBar
@@ -24,8 +26,14 @@ export default function App() {
       <main className="map-container">
         <MapComponent
           places={places}
-          onSelectedPlace={setSelectedPlace}
+          onSelectPlace={setSelectedPlace}
         />
+        {selectedPlace && (
+          <PlaceCard
+            place={selectedPlace}
+            onClose={() => setSelectedPlace(null)}
+          />
+        )}
       </main>
     </div>
   )

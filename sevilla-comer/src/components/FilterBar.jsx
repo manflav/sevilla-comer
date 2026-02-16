@@ -25,6 +25,7 @@ export default function FilterBar({activeFilter, setActiveFilter, setPlaces, set
 
         try {
             const results =await fetchPlaces(Filter.id)
+            console.log('Resultados:', results)
             setPlaces(results)
         }   catch (e) {
             console.error(e)
@@ -41,7 +42,7 @@ export default function FilterBar({activeFilter, setActiveFilter, setPlaces, set
                 <button
                 key={f.id}
                 className={`filter-btn ${activeFilter === f.id ? 'active' : ''}`}
-                onClick={() => setActiveFilter(f.id)}
+                onClick={() => handleFilter(f)}
                 >
                     {f.emoji} {f.label}
                 </button>

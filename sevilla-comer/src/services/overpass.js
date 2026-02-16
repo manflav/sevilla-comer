@@ -1,13 +1,13 @@
-const OVERPASS_URL = 'https://overpass-api/interpreter'
+const OVERPASS_URL = 'https://overpass-api.de/api/interpreter'
 const SEVILLA_BBOX = '37.30,-6.05,37.48,-5.85'
 
 const CUISINE_QUERIES = {
-    tapas:    '["cuisine"~"tapas|spanish|andalusian"]',
-    japanese: '["cuisine"~"japanese|sushi|ramen"]',
-    italian:  '["cuisine"~"italian|pizza|pasta"]',
-    burger:   '["cuisine"~"burger|american|fast_food"]',
-    cafe:     '["amenity"~"cafe|coffee_shop"]',
-    seafood:  '["cuisine"~"seafood|fish|mariscos"]',
+    tapas:    '["cuisine"~"tapas|spanish|andalusian",i]',
+    japanese: '["cuisine"~"japanese|sushi|ramen",i]',
+    italian:  '["cuisine"~"italian|pizza|pasta",i]',
+    burger:   '["cuisine"~"burger|american|fast_food",i]',
+    cafe:     '["amenity"~"cafe|coffee_shop",i]',
+    seafood:  '["cuisine"~"seafood|fish|mariscos",i]',
 }
 
 export async function fetchPlaces(cuisineKey) {
@@ -35,6 +35,7 @@ export async function fetchPlaces(cuisineKey) {
         ` 
     }
 
+    console.log('Query enviada:', query)
     const res = await fetch(OVERPASS_URL, {
         method: 'POST',
         body: query,
